@@ -28,8 +28,8 @@ from PySide import QtGui
 
 sys.path.append('gui/')
 sys.path.append('lib/')
-sys.path.append('../dev/')
 sys.path.append('../arrangement/')
+
 import myWindowLib_arrangement
 
 __version__ = '0.1'

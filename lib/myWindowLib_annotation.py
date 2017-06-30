@@ -39,13 +39,11 @@ from skimage.feature import canny
 # from skimage.transform import hough_line_peaks
 # from skimage.transform import probabilistic_hough_line
 
-
 import myCanvasLib
 import annotation_gui
-import Universal_Tool_Kit as UTK
+import utilities
 import arrangement.geometricTraits as trts
 import my_svg_parser_dev as mSGVp
-
 
 # ###### debug-mode
 # import matplotlib.pyplot as plt
@@ -242,7 +240,6 @@ class MainWindow(PySide.QtGui.QMainWindow, annotation_gui.Ui_MainWindow):
                 self.traits_visualization_canvas.draw_trait_circle(trait, clr, line_style)
 
 
-
     ########################################
     ##### trait buffer and list manipulation
     ########################################
@@ -375,21 +372,21 @@ class MainWindow(PySide.QtGui.QMainWindow, annotation_gui.Ui_MainWindow):
 
         else:
             ### smoothing
-            image = cv2.blur(image, (7,7))
+            image = cv2.blur(image, (9,9))
             image = cv2.GaussianBlur(image, (9,9),0)
 
             ### oriented gradient of the image
             # is it (dx - 1j*dy) or (dx + 1j*dy)
             # this is related to "flipud" problem mentioned above
-            dx = cv2.Sobel(image, cv2.CV_64F, 1,0, ksize=3)
-            dy = cv2.Sobel(image, cv2.CV_64F, 0,1, ksize=3)
+            dx = cv2.Sobel(image, cv2.CV_64F, 1,0, ksize=9)
+            dy = cv2.Sobel(image, cv2.CV_64F, 0,1, ksize=9)
             grd = dx - 1j*dy
             
             ### weighted histogram of oriented gradients (over the whole image)
-            hist, binc = UTK.wHOG (grd, NumBin = 180*5)
+            hist, binc = utilities.wHOG (grd, NumBin = 180*5)
 
             ### finding peaks in the histogram
-            peak_idx = UTK.FindPeaks( hist,
+            peak_idx = utilities.FindPeaks( hist,
                                       CWT=True, cwt_range=(5,50,5),
                                       Refine_win=20 , MinPeakDist = 30 , MinPeakVal=.2,
                                       Polar=False )
@@ -512,7 +509,7 @@ class MainWindow(PySide.QtGui.QMainWindow, annotation_gui.Ui_MainWindow):
             lines = []
             for (orientation, sinog_angle, sinogram) in zip(orientations, sinog_angles, sinograms.T):
                 # Find peaks in sinogram:
-                peakind = UTK.FindPeaks(sinogram ,
+                peakind = utilities.FindPeaks(sinogram ,
                                         CWT=False, cwt_range=(1,8,1),
                                         Refine_win = int(refWin),
                                         MinPeakDist = int(minDist),
@@ -687,12 +684,14 @@ class MainWindow(PySide.QtGui.QMainWindow, annotation_gui.Ui_MainWindow):
         if file_ext in ['svg', 'SVG']:
             file_name = mSGVp.svg_to_ymal(file_name, convert_segment_2_infinite_line=False)
             print ( '\t NOTE: svg file converted to yaml, and the yaml file will be loaded' )
-        
+
+
+
+        print ('todo: arrangement has a yaml loader, use that instead?')
         stream = open(file_name, 'r')
         data = yaml.load(stream)
 
         traits = []
-        
         if 'lines' in data.keys():
             for l in data['lines']:
                 if len(l) == 4: #[x1,y1,x2,y2]

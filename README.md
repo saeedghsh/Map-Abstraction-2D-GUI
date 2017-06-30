@@ -1,6 +1,6 @@
 # Robot-Map-Abstraction
 
-## Robot-Map-Annotation-GUI
+## Annotation GUI
 A simple GUI for robot map annotation with simple curves 
 This could be useful for fast creating "ground-truth".
 The result also could be used by the Robot-Map-Arrangement-GUI to creat an "arrangement" representation of the map.
@@ -38,27 +38,25 @@ The overestimates must be manually edited in the text widget.
 
 Second, use radiography to find lines.
 This also is very noisy (I still don't have a reliable peak-detection algorithm!).
-It makes it much simpler work with if radiography is employ on single orientation.
-Hey, that't what buffer and list are for.
+It makes it much simpler to work with if radiography is employed on single orientation, one at a time.
+Hey, that's what buffer and list are for.
 Apply radiography in one direction, clean-up the mess, and append the desired traits from buffer to the list.
-Continue with the other orientations.
+Continue with the another orientation.
 
 ### loading and saving traits to and fro file
 supported: svg and yaml
 important note on svg: see the known bugs
-
 
 ### visualization options
 To have a clear vision of only traits in buffer, it's possible to only visualize traits in the buffer without loosing the list.
 Also one can selectively visualize traits of a particular class.
 
 ### known bugs
-
 for some reason (I'm not sure why myself!) I flip the image upside down after loading.
 Of course it has something to do with opencv setting the origin of the image on top-left.
 But this problem shows up while computing the gradient of the image (effecting the orientation estimation), and radiography (effecting the line extraction.)
-The current order of flippings (I think three times, in 'myWindow.load_image', 'myWindow.find_dominant_orientations', and 'myWindow.find_lines_with_radiography') works fine for the GUI!
-However, if inkscape is used for annotation of a map and the traits are saved as svg, then the GUI's frame of reference and the frame of SVG are fliped upside down relatively.
+The current order of flippings (I think three times, in ```myWindow.load_image```, ```myWindow.find_dominant_orientations```, and ```myWindow.find_lines_with_radiography```) works fine for the GUI!
+However, if inkscape is used for annotation of a map and the traits are saved as svg, then the GUI's frame of reference and the frame of SVG are fliped upside down relatively (I learned that inkscape also has the origin on top! so the svgs from inkscape are upside-down, this is to be fixed in ```convert_svg_to_yaml.py```).
 This problem started when I could not flip the image in the QT.graphiview connected to matplotlib, and the numpy.flipud was the quickest. Then the problem of opencv in gradient came about, and now I don't have hang of it!
 The solution is to maintain the proper frame of reference for the GUI.
 Start by jsut loading an image and not flipping it, then try to just plot it correctly.
@@ -66,10 +64,7 @@ Then make sure that the svg could be loaded and has the same frame of reference.
 Finally find the correct places to adjust the frame of reference by flipping the image temporarily (maybe no-where, maybe only in gradient computation and radiography).
 But, be careful not to screw up manual annotation's frame of reference!
 
-
-
-## Robot-Map-Annotation-GUI
-
+## Arrangement GUI
 
 ### TODO
 - [ ] (arrangement) most importantly, is the visualization of the arrangement in here!
