@@ -1,73 +1,55 @@
-# Robot-Map-Abstraction
+Robot-Map-Abstraction
+=====================
 
-## Annotation GUI
-A simple GUI for robot map annotation with simple curves 
-This could be useful for fast creating "ground-truth".
-The result also could be used by the Robot-Map-Arrangement-GUI to creat an "arrangement" representation of the map.
+Dependencies and Download
+-------------------------
+Most dependencies are listed in `requirements.txt`, and will be installed by the following instructions.
+But there are two more, namely [opencv](http://docs.opencv.org/trunk/d7/d9f/tutorial_linux_install.html) and [arrangement](https://github.com/saeedghsh/arrangement/), which should be installed separately.
+```shell
+# Download
+git clone https://github.com/saeedghsh/Map-Abstraction-2D.git
+cd Map-Abstraction-2D
 
+# Install dependencies
+pip install -r requirements.txt
 
-### Why buffer and list?
-buffer is like a scrapbook where things are unstable, items could be added to it, but not selectively removed. it could be only reset or appended to the list. It has only graphical manifestation.
+# launch GUIs
+python runMe_annotation.py
+python runMe_arrangement.py
+```
 
-list is more stable. items in it could be selectively removed. it has a list widget in addition to graphical representation. selected items in the list widget will be highlighted to facilitate the selective removing process.
+Annotation GUI
+--------------
+A simple GUI for map annotation with simple geometric traits.
+This could be useful for fast manual annotation for "ground-truth".
+The result also could be used by the Arrangement-GUI to creat an [arrangement](https://github.com/saeedghsh/arrangement) representation of the map.
+![Annotation_GUI](https://github.com/saeedghsh/Robot-Map-Abstraction/blob/master/docs/annotation_gui.png)
+Read on how to use the GUI [here](https://github.com/saeedghsh/Robot-Map-Abstraction/blob/master/docs/HOWTO_annotation_GUI.md).
 
-what is the difference between buffer and list?
-list: in blue and solid line, also represented in the list widget
-buffer: only represented graphically and in red dashed lines
+Arrangement GUI
+---------------
+This GUI is for constructing an [arrangement](https://github.com/saeedghsh/arrangement), and visualizing the result.
+![Arrangement_GUI](https://github.com/saeedghsh/Robot-Map-Abstraction/blob/master/docs/arrangement_gui.png)
+Read on how to use this GUI [here](https://github.com/saeedghsh/Robot-Map-Abstraction/blob/master/docs/HOWTO_arrangement_GUI.md).
 
-appending the buffer to the list automatically resets the buffer.
+Laundry List
+------------
+- [ ] skimage seems unnecessary.
+- [ ] (annotation) remove the perpendicular assumption of the automatic dominant orientation.
+- [ ] (annotation)add automatice trait detection for circle.
+- [ ] (arrangement) animating the arrangement.
+- [ ] (arrangement) interactive face selection and attribute assignment.
+- [ ] (arrangement) save arrangement result.
 
-### How to manually annotate?
-annotation point (red points in the figure) could be added with left-click in the figure.
-traits are created from the available annotation points with right-click in the figure.
-after each trait construction, all available points are discarded
+License
+-------
+Distributed with a GNU GENERAL PUBLIC LICENSE; see LICENSE.
+```
+Copyright (C) Saeed Gholami Shahbandi <saeed.gh.sh@gmail.com>
+```
 
-for line, ray and segmet only the last two annotation points are considered, the rest are ignored.
-for ray, the first point is the starting point and the second point specifies the direction.
-for segment, the two points are considered to be the ending points.
-
-for the circle, if only two points are available, first is the center and the second one is considered to be on the perimeter of circle. if more than three points are available, the last three point are representing the perimeter of the circle.
-
-for arc, only the first three points count, they are all considered to be on the perimeter of the arc, the first and third point define the ending points of the arc. the order of the first and last points are important, they should be CCW, passing through the body of arc.
-Important note on Arc; it's not working well, I haven't fixed the "zero-crossing" problem of the radian for it.
-
-### How to use radiography for automatic line ectraction?
-First find the dominant orientations
-Be aware that the GUI over-estimates the number of orientations and it is noisy.
-The overestimates must be manually edited in the text widget.
-
-Second, use radiography to find lines.
-This also is very noisy (I still don't have a reliable peak-detection algorithm!).
-It makes it much simpler to work with if radiography is employed on single orientation, one at a time.
-Hey, that's what buffer and list are for.
-Apply radiography in one direction, clean-up the mess, and append the desired traits from buffer to the list.
-Continue with the another orientation.
-
-### loading and saving traits to and fro file
-supported: svg and yaml
-important note on svg: see the known bugs
-
-### visualization options
-To have a clear vision of only traits in buffer, it's possible to only visualize traits in the buffer without loosing the list.
-Also one can selectively visualize traits of a particular class.
-
-### known bugs
-for some reason (I'm not sure why myself!) I flip the image upside down after loading.
-Of course it has something to do with opencv setting the origin of the image on top-left.
-But this problem shows up while computing the gradient of the image (effecting the orientation estimation), and radiography (effecting the line extraction.)
-The current order of flippings (I think three times, in ```myWindow.load_image```, ```myWindow.find_dominant_orientations```, and ```myWindow.find_lines_with_radiography```) works fine for the GUI!
-However, if inkscape is used for annotation of a map and the traits are saved as svg, then the GUI's frame of reference and the frame of SVG are fliped upside down relatively (I learned that inkscape also has the origin on top! so the svgs from inkscape are upside-down, this is to be fixed in ```convert_svg_to_yaml.py```).
-This problem started when I could not flip the image in the QT.graphiview connected to matplotlib, and the numpy.flipud was the quickest. Then the problem of opencv in gradient came about, and now I don't have hang of it!
-The solution is to maintain the proper frame of reference for the GUI.
-Start by jsut loading an image and not flipping it, then try to just plot it correctly.
-Then make sure that the svg could be loaded and has the same frame of reference.
-Finally find the correct places to adjust the frame of reference by flipping the image temporarily (maybe no-where, maybe only in gradient computation and radiography).
-But, be careful not to screw up manual annotation's frame of reference!
-
-## Arrangement GUI
-
-### TODO
-- [ ] (arrangement) most importantly, is the visualization of the arrangement in here!
-- [ ] (arrangement) fix the arrangement library to return the dual graphs (it might be actually there!)
-- [ ] (arrangement) then, comes the question on how to convert arrangement's dual graphs to "adjacency map" and "connectivity map". This is not essentialy a problem to be solved in the arrangement library, so this is the place for it. Howeverm the answer to this question might require some though (on how to do it) rather than just coding!
-(arrangement)
+These GUIs have been made to facilitate the experimentation and developement of the methods of the following publications:
+- S. G. Shahbandi, B. Åstrand and R. Philippsen, "Sensor based adaptive metric-topological cell decomposition method for semantic annotation of structured environments", ICARCV, Singapore, 2014, pp. 1771-1777. doi: 10.1109/ICARCV.2014.7064584 [URL](http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7064584&isnumber=7064265).
+- S. G. Shahbandi, B. Åstrand and R. Philippsen, "Semi-supervised semantic labeling of adaptive cell decomposition maps in well-structured environments", ECMR, Lincoln, 2015, pp. 1-8. doi: 10.1109/ECMR.2015.7324207 [URL](http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7324207&isnumber=7324045).
+- S. G. Shahbandi, ‘Semantic Mapping in Warehouses’, Licentiate dissertation, Halmstad University, 2016. [URL](http://urn.kb.se/resolve?urn=urn:nbn:se:hh:diva-32170)
+- S. G. Shahbandi, M. Magnusson, "2D Map Alignment With Region Decomposition", submitted to Autonomous Robots, 2017.

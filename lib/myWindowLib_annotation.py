@@ -1,21 +1,20 @@
-# "
-# Copyright (C) 2015 Saeed Gholami Shahbandi. All rights reserved.
+'''
+Copyright (C) 2015 Saeed Gholami Shahbandi. All rights reserved.
 
-# This program is free software: you can redistribute it and/or
-# modify it under the terms of the GNU Lesser General Public License
-# as published by the Free Software Foundation, either version 3 of
-# the License, or (at your option) any later version.
+This program is free software: you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public License
+as published by the Free Software Foundation, either version 3 of
+the License, or (at your option) any later version.
 
-# This program is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-# Lesser General Public License for more details.
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Lesser General Public License for more details.
 
-# You should have received a copy of the GNU Lesser General Public
-# License along with this program. If not, see
-# <http://www.gnu.org/licenses/>
-# "
-
+You should have received a copy of the GNU Lesser General Public
+License along with this program. If not, see
+<http://www.gnu.org/licenses/>
+'''
 
 from __future__ import print_function
 
@@ -28,7 +27,7 @@ import sympy as sym
 import cv2
 import yaml
 
-from sklearn import mixture
+# from sklearn import mixture
 from numpy.linalg import det
 
 import skimage.transform
@@ -42,12 +41,9 @@ from skimage.feature import canny
 import myCanvasLib
 import annotation_gui
 import utilities
-import arrangement.geometricTraits as trts
-import my_svg_parser_dev as mSGVp
 
-# ###### debug-mode
-# import matplotlib.pyplot as plt
-# ######
+import arrangement.geometricTraits as trts
+import arrangement.utils as arr_utils
 
 #####################################################################
 #####################################################################
@@ -383,28 +379,24 @@ class MainWindow(PySide.QtGui.QMainWindow, annotation_gui.Ui_MainWindow):
             grd = dx - 1j*dy
             
             ### weighted histogram of oriented gradients (over the whole image)
-            hist, binc = utilities.wHOG (grd, NumBin = 180*5)
+            hist, binc = utilities.wHOG (grd, NumBin=180*5, Extension=False)
+            hist = utilities.smooth(hist, window_len=21)
+
 
             ### finding peaks in the histogram
-            peak_idx = utilities.FindPeaks( hist,
-                                      CWT=True, cwt_range=(5,50,5),
-                                      Refine_win=20 , MinPeakDist = 30 , MinPeakVal=.2,
-                                      Polar=False )
-
+            orthogonal_orientations = True
+            if orthogonal_orientations:
+                print ('\t *** WARNING: currently auto-orientation detection assumes perpendicularity...')
+                # if dominant orientations are orthogonal, find only one and add pi/2 to it
+                peak_idx = np.argmax(hist)
+                orientations = [binc[peak_idx], binc[peak_idx]+np.pi/2]
+  
             # shrinking the range to [-pi/2, pi/2]
-            orientations = list(binc[peak_idx])
             for idx in range(len(orientations)):
                 if orientations[idx]< -np.pi/2:
                     orientations[idx] += np.pi
                 elif np.pi/2 <= orientations[idx]:
                     orientations[idx] -= np.pi
-
-            # removing similar angles
-            for idx in range(len(orientations)-1,-1,-1):
-                for jdx in range(idx):
-                    if np.abs(orientations[idx] - orientations[jdx]) < np.spacing(10**10):
-                        orientations.pop(idx)
-                        break
 
         ### setting orientations into places
         self.data['dominant_orientation'] = np.array(orientations)
@@ -682,7 +674,7 @@ class MainWindow(PySide.QtGui.QMainWindow, annotation_gui.Ui_MainWindow):
             
         # convert svg to yaml and load the yaml file
         if file_ext in ['svg', 'SVG']:
-            file_name = mSGVp.svg_to_ymal(file_name, convert_segment_2_infinite_line=False)
+            file_name = arr_utils.svg_to_ymal(file_name, convert_segment_2_infinite_line=False)
             print ( '\t NOTE: svg file converted to yaml, and the yaml file will be loaded' )
 
 

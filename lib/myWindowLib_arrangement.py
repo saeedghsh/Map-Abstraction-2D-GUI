@@ -20,21 +20,13 @@
 
 import sys, os, platform, time
 
-from sklearn import mixture
+# from sklearn import mixture
 import numpy as np
 from numpy.linalg import det
 import sympy as sym
 import cv2
 import yaml
 import PySide
-
-from skimage.feature import canny
-from skimage.feature import peak_local_max
-from skimage.transform import hough_circle
-from skimage.transform import hough_line
-from skimage.transform import hough_line_peaks
-from skimage.transform import probabilistic_hough_line
-
 
 import myCanvasLib
 import arrangement_gui
