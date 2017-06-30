@@ -3,6 +3,7 @@ Map-Abstraction-2D
 A pair of GUIs for annotating (auto and manual) spatial maps in Bitmap format with canonical geometric traits (line, circle and their segments).
 The main underlying representation for these GUIs is the [arrangement](https://github.com/saeedghsh/arrangement/).
 
+
 Dependencies and Download
 -------------------------
 Most dependencies are listed in `requirements.txt`, and will be installed by the following instructions.
@@ -28,20 +29,24 @@ The result also could be used by the Arrangement-GUI to creat an [arrangement](h
 Read on how to use the GUI [here](https://github.com/saeedghsh/Map-Abstraction-2D/blob/master/docs/HOWTO_annotation_GUI.md).
 ![Annotation_GUI](https://github.com/saeedghsh/Map-Abstraction-2D/blob/master/docs/annotation_gui.png)
 
+
 Arrangement GUI
 ---------------
 This GUI is for constructing an [arrangement](https://github.com/saeedghsh/arrangement), and visualizing the result.
 Read on how to use this GUI [here](https://github.com/saeedghsh/Map-Abstraction-2D/blob/master/docs/HOWTO_arrangement_GUI.md).
 ![Arrangement_GUI](https://github.com/saeedghsh/Map-Abstraction-2D/blob/master/docs/arrangement_gui.png)
 
+
 Laundry List
 ------------
-- [ ] skimage seems unnecessary.
+- [ ] `skimage` seems unnecessary.
 - [ ] (annotation) remove the perpendicular assumption of the automatic dominant orientation.
 - [ ] (annotation)add automatice trait detection for circle.
-- [ ] (arrangement) animating the arrangement.
+- [ ] (arrangement) animating the arrangement (?).
 - [ ] (arrangement) interactive face selection and attribute assignment.
 - [ ] (arrangement) save arrangement result.
+- [ ] (arrangement) HowTo document.
+
 
 License
 -------
