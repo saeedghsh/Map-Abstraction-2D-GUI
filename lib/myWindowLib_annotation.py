@@ -19,31 +19,23 @@ License along with this program. If not, see
 from __future__ import print_function
 
 import sys, os, platform, time
+import cv2
+import yaml
 import PySide
 
 import numpy as np
 import sympy as sym
-
-import cv2
-import yaml
-
-# from sklearn import mixture
 from numpy.linalg import det
+import skimage.transform # for radon
 
-import skimage.transform
-from skimage.feature import canny
-# from skimage.feature import peak_local_max
-# from skimage.transform import hough_circle
-# from skimage.transform import hough_line
-# from skimage.transform import hough_line_peaks
-# from skimage.transform import probabilistic_hough_line
+# arrangement repo
+import arrangement.geometricTraits as trts
+import arrangement.utils as arr_utils
 
+# this repo
 import myCanvasLib
 import annotation_gui
 import utilities
-
-import arrangement.geometricTraits as trts
-import arrangement.utils as arr_utils
 
 #####################################################################
 #####################################################################
@@ -324,7 +316,7 @@ class MainWindow(PySide.QtGui.QMainWindow, annotation_gui.Ui_MainWindow):
                 c += ',' + '{:.2f}'.format( float(trait.obj.center.y) ) + ')'
                 r = '{:.2f}'.format( float(trait.obj.radius) )
                 t = '(' + '{:.2f}'.format( float(trait.t1) ) + ',' + '{:.2f}'.format( float(trait.t2) ) + ')'
-                string = 'A: c:'+c+', r:'+r , ', t:'+t
+                string = 'A: c:'+c+', r:'+r + ', t:'+t
 
             elif isinstance(trait, trts.CircleModified):
                 c  = '(' + '{:.2f}'.format( float(trait.obj.center.x) )
@@ -333,6 +325,7 @@ class MainWindow(PySide.QtGui.QMainWindow, annotation_gui.Ui_MainWindow):
                 string = 'C: c'+c+', r'+r
 
             idx = self.ui.listWidget_traits_list.count()
+            print (idx, string)
             self.ui.listWidget_traits_list.insertItem(idx, string)
 
     ########################################
@@ -743,7 +736,7 @@ class MainWindow(PySide.QtGui.QMainWindow, annotation_gui.Ui_MainWindow):
                 data['lines'].append(l)
                 
             elif isinstance(trait, trts.ArcModified):
-                a = [trait.obj.center.x, trait.obj.center.y, trait.obj.radius, trait.t1, trait.t2]
+                a = [trait.obj.center.x, trait.obj.center.y, trait.obj.radius, sym.Float(trait.t1), sym.Float(trait.t2)]
                 a = [np.float(i.evalf()) for i in a]
                 data['arcs'].append(a)
                 

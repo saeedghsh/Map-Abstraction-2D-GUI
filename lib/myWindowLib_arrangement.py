@@ -1,36 +1,35 @@
-# "
-# Copyright (C) 2015 Saeed Gholami Shahbandi. All rights reserved.
+'''
+Copyright (C) 2015 Saeed Gholami Shahbandi. All rights reserved.
 
-# This program is free software: you can redistribute it and/or
-# modify it under the terms of the GNU Lesser General Public License
-# as published by the Free Software Foundation, either version 3 of
-# the License, or (at your option) any later version.
+This program is free software: you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public License
+as published by the Free Software Foundation, either version 3 of
+the License, or (at your option) any later version.
 
-# This program is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-# Lesser General Public License for more details.
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Lesser General Public License for more details.
 
-# You should have received a copy of the GNU Lesser General Public
-# License along with this program. If not, see
-# <http://www.gnu.org/licenses/>
-# "
-
-# pushButton_auto_detect_lines_rays_segments
+You should have received a copy of the GNU Lesser General Public
+License along with this program. If not, see
+<http://www.gnu.org/licenses/>
+'''
 
 import sys, os, platform, time
 
-# from sklearn import mixture
-import numpy as np
-from numpy.linalg import det
-import sympy as sym
 import cv2
 import yaml
 import PySide
+import numpy as np
+import sympy as sym
+from numpy.linalg import det
 
+# this repo
 import myCanvasLib
 import arrangement_gui
 
+# arrangement repo
 import arrangement.arrangement as arr
 import arrangement.geometricTraits as trts
 # import arrangement.plotting as aplt

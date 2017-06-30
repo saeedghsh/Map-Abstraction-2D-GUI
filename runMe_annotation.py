@@ -29,7 +29,6 @@ from PySide import QtGui
 sys.path.append('gui/')
 sys.path.append('lib/')
 sys.path.append('../arrangement/')
-sys.path.append('../dev/') # for svg parser
 
 import myWindowLib_annotation
 

@@ -39,14 +39,13 @@ Read on how to use this GUI [here](https://github.com/saeedghsh/Map-Abstraction-
 
 Laundry List
 ------------
-- [ ] `skimage` seems unnecessary.
 - [ ] (annotation) remove the perpendicular assumption of the automatic dominant orientation.
 - [ ] (annotation)add automatice trait detection for circle.
 - [ ] (arrangement) animating the arrangement (?).
 - [ ] (arrangement) interactive face selection and attribute assignment.
 - [ ] (arrangement) save arrangement result.
 - [ ] (arrangement) HowTo document.
-
+<!-- - [ ] `skimage` seems unnecessary. Actually Not!, it is used for Radon transform, which Opencv doesn't have -->
 
 License
 -------
