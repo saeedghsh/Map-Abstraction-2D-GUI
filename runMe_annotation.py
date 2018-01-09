@@ -19,11 +19,6 @@ License along with this program. If not, see
 from __future__ import print_function
 
 import sys
-if sys.version_info[0] == 3:
-    from importlib import reload
-elif sys.version_info[0] == 2:
-    pass
-
 from PySide import QtGui
 
 sys.path.append('gui/')
@@ -34,9 +29,9 @@ import myWindowLib_annotation
 
 __version__ = '0.1'
 
-# if ''name'' == "''main''":
-app = QtGui.QApplication(sys.argv)
-myGUI = myWindowLib_annotation.MainWindow()
-myGUI.show()
-app.exec_()
-# sys.exit(app.exec_())
+if __name__ == '__main__':
+    app = QtGui.QApplication(sys.argv)
+    myGUI = myWindowLib_annotation.MainWindow()
+    myGUI.show()
+    app.exec_()
+    # sys.exit(app.exec_())

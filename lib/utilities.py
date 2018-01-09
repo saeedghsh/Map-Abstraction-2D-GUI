@@ -1,3 +1,20 @@
+'''
+Copyright (C) 2015 Saeed Gholami Shahbandi. All rights reserved.
+
+This program is free software: you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public License
+as published by the Free Software Foundation, either version 3 of
+the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this program. If not, see
+<http://www.gnu.org/licenses/>
+'''
 import numpy as np
 import scipy.signal
 
@@ -253,10 +270,10 @@ def smooth(x, window_len=11, window='hanning'):
 
     if window_len < 3:  return x
 
-    if x.ndim != 1: raise (NameError('smooth only accepts 1 dimension arrays.'))
-    if x.size < window_len:  raise (NameError('Input vector needs to be bigger than window size.'))
+    if x.ndim != 1: raise (StandardError('smooth only accepts 1 dimension arrays.'))
+    if x.size < window_len:  raise (StandardError('Input vector needs to be bigger than window size.'))
     win_type = ['flat', 'hanning', 'hamming', 'bartlett', 'blackman']
-    if window not in win_type: raise( NameError( 'Window type is unknown'))
+    if window not in win_type: raise( StandardError( 'Window type is unknown'))
 
     s = np.r_[x[window_len-1:0:-1],x,x[-2:-window_len-1:-1]]
     #print(len(s))
